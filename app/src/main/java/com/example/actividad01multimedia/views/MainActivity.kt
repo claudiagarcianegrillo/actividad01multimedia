@@ -7,10 +7,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.actividad01multimedia.R
 import com.example.actividad01multimedia.logic.ClientController
 import com.example.actividad01multimedia.logic.TAG
-import com.example.actividad01multimedia.logic.interfaces.ClientCrud
-class MainActivity : AppCompatActivity(), ClientCrud {
+class MainActivity : AppCompatActivity() {
     private val controller = ClientController()
-    private val dialog = ClientDialog()
+
+    private val dialog = ClientDialog(
+        onAdd = controller::add,
+        onDel = controller::delete,
+        onUpdate = controller::update
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,8 +22,6 @@ class MainActivity : AppCompatActivity(), ClientCrud {
 
         Log.d(TAG, "Esto es un ejemplo")
         Log.d(TAG, controller.getAll().toString())
-
-        dialog.setListener(this)
 
         findViewById<Button>(R.id.btnAdd).setOnClickListener {
             dialog.show(Action.ADD, controller.getAll(), controller.newId())
@@ -32,7 +34,4 @@ class MainActivity : AppCompatActivity(), ClientCrud {
         }
     }
 
-    override fun clientAdd(id: Int, name: String) = controller.add(id, name)
-    override fun clientDel(id: Int) = controller.delete(id)
-    override fun clientUpdate(id: Int, name: String) = controller.update(id, name)
-}
+    }
